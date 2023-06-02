@@ -9,8 +9,8 @@ import (
 var Log *logrus.Logger
 
 func init() {
-    Log = logrus.New()
-    Log.Out = os.Stdout
+	Log = logrus.New()
+	Log.Out = os.Stdout
 
-    Log.SetLevel(logrus.InfoLevel)
+	Log.SetLevel(logrus.InfoLevel)
 }

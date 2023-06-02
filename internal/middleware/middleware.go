@@ -11,7 +11,7 @@ import (
 func LoggingMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
-		
+
 		internal.Log.WithFields(logrus.Fields{
 			"method": r.Method,
 			"url":    r.URL,

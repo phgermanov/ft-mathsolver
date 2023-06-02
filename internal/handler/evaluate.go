@@ -9,7 +9,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func (h *Handler)EvaluateHandler(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) EvaluateHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, ErrInvalidRequestMethod.Error(), http.StatusMethodNotAllowed)
 		return
@@ -23,7 +23,7 @@ func (h *Handler)EvaluateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	internal.Log.WithFields(logrus.Fields{
-		"payload":   exp.Expression,
+		"payload": exp.Expression,
 	}).Info("received payload")
 
 	// If the expression cannot be evaluated, record the error
@@ -35,11 +35,9 @@ func (h *Handler)EvaluateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	internal.Log.WithFields(logrus.Fields{
-		"result":   result.Result,
+		"result": result.Result,
 	}).Info("evaluation successful")
-
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(result)
 }
-

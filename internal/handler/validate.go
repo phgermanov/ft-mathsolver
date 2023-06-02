@@ -24,7 +24,7 @@ func (h *Handler) ValidateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	internal.Log.WithFields(logrus.Fields{
-		"payload":   exp.Expression,
+		"payload": exp.Expression,
 	}).Info("received payload")
 
 	validationResult := model.Validate(exp)
@@ -35,7 +35,7 @@ func (h *Handler) ValidateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	internal.Log.WithFields(logrus.Fields{
-		"valid":   validationResult.Valid,
+		"valid": validationResult.Valid,
 	}).Info("validation complete")
 
 	w.Header().Set("Content-Type", "application/json")

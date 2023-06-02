@@ -8,7 +8,7 @@ import (
 
 var (
 	ErrInvalidRequestMethod = errors.New("invalid request method")
-	ErrInvalidJSON = errors.New("invalid JSON")
+	ErrInvalidJSON          = errors.New("invalid JSON")
 )
 
 func (h *Handler) ErrorsHandler(w http.ResponseWriter, r *http.Request) {
