@@ -7,6 +7,7 @@ import (
 )
 
 func TestValidate(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		name       string
 		expression string
@@ -45,7 +46,9 @@ func TestValidate(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			result := Validate(Expression{Expression: tt.expression})
 
 			assert.Equal(t, tt.valid, result.Valid)

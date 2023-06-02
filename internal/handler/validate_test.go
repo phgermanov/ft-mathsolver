@@ -13,6 +13,7 @@ import (
 )
 
 func TestValidateHandler(t *testing.T) {
+	t.Parallel()
 	handlers := &Handler{
 		ErrorRecorder: &modelfakes.FakeErrorRecorder{},
 	}
@@ -46,7 +47,9 @@ func TestValidateHandler(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			requestBody, _ := json.Marshal(model.Expression{Expression: tt.expression})
 
 			req, err := http.NewRequest("POST", "/validate", bytes.NewBuffer(requestBody))

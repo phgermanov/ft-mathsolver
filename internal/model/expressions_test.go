@@ -7,6 +7,7 @@ import (
 )
 
 func TestParse(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		input    string
 		expected int
@@ -69,15 +70,17 @@ func TestParse(t *testing.T) {
 		},
 	}
 
-	for _, test := range tests {
-		t.Run(test.input, func(t *testing.T) {
-			result, err := parse(test.input)
-			if test.err != nil {
-				assert.EqualError(t, err, test.err.Error())
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.input, func(t *testing.T) {
+			t.Parallel()
+			result, err := parse(tt.input)
+			if tt.err != nil {
+				assert.EqualError(t, err, tt.err.Error())
 			} else {
 				assert.NoError(t, err)
 			}
-			assert.Equal(t, test.expected, result)
+			assert.Equal(t, tt.expected, result)
 		})
 	}
 }

@@ -7,10 +7,7 @@ import (
 )
 
 func TestMemoryErrorRecorder(t *testing.T) {
-	recorder := MemoryErrorRecorder{
-		ExpressionErrorMap: make(map[string]*Error),
-	}
-
+	t.Parallel()
 	tests := []struct {
 		name       string
 		expression string
@@ -35,8 +32,16 @@ func TestMemoryErrorRecorder(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			recorder.RecordError(Expression{Expression: tt.expression}, tt.endpoint, tt.error)
+			t.Parallel()
+			recorder := MemoryErrorRecorder{
+				ExpressionErrorMap: make(map[string]*Error),
+			}
+
+			for i := 0; i < tt.frequency; i++ {
+				recorder.RecordError(Expression{Expression: tt.expression}, tt.endpoint, tt.error)
+			}
 
 			error, ok := recorder.ExpressionErrorMap[recorder.key(Expression{Expression: tt.expression}, tt.endpoint)]
 			assert.True(t, ok)
@@ -48,10 +53,7 @@ func TestMemoryErrorRecorder(t *testing.T) {
 }
 
 func TestGetErrors(t *testing.T) {
-	recorder := MemoryErrorRecorder{
-		ExpressionErrorMap: make(map[string]*Error),
-	}
-
+	t.Parallel()
 	tests := []struct {
 		name       string
 		expression string
@@ -73,17 +75,21 @@ func TestGetErrors(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			recorder := MemoryErrorRecorder{
+				ExpressionErrorMap: make(map[string]*Error),
+			}
+
 			recorder.RecordError(Expression{Expression: tt.expression}, tt.endpoint, tt.error)
+
+			errors := recorder.GetErrors()
+			assert.Len(t, errors, 1)
+			assert.Equal(t, tt.expression, errors[0].Expression)
+			assert.Equal(t, tt.endpoint, errors[0].Endpoint)
+			assert.Equal(t, tt.error.Error(), errors[0].Type)
 		})
-	}
-
-	errors := recorder.GetErrors()
-	assert.Len(t, errors, len(tests))
-
-	for i, tt := range tests {
-		assert.Equal(t, tt.expression, errors[i].Expression)
-		assert.Equal(t, tt.endpoint, errors[i].Endpoint)
-		assert.Equal(t, tt.error.Error(), errors[i].Type)
 	}
 }
